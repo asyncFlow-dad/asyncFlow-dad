@@ -25,7 +25,7 @@
       "widgetId": "terminal-info",
       "name": "Terminal-info Widget",
       "position": {
-        "x": 368,
+        "x": 344,
         "y": 122
       },
       "size": {
@@ -49,28 +49,16 @@
         "width": 536,
         "height": 160
       },
-      "config": {},
+      "config": {
+        "lockAspectRatio": true,
+        "hideLangsArr": [],
+        "hideLangs": "",
+        "langsLayout": "bars"
+      },
       "locked": false,
       "visible": true,
       "zIndex": 4,
       "instanceId": "widget_1789458581458_3"
-    },
-    {
-      "widgetId": "footer",
-      "name": "Footer Widget",
-      "position": {
-        "x": 0,
-        "y": 578
-      },
-      "size": {
-        "width": 800,
-        "height": 50
-      },
-      "config": {},
-      "locked": false,
-      "visible": true,
-      "zIndex": 6,
-      "instanceId": "widget_1789458581458_4"
     },
     {
       "widgetId": "tech-stack",
@@ -117,7 +105,7 @@
         "height": 296
       },
       "config": {
-        "accentColor": "#ffa657",
+        "accentColor": "#f0f0f0",
         "asciiText": [
           "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
           "@E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2E2@",
@@ -5286,13 +5274,32 @@
       "name": "Contribution-snake Widget",
       "position": {
         "x": 0,
-        "y": 644
+        "y": 578
       },
       "size": {
         "width": 800,
         "height": 250
       },
       "config": {},
+      "locked": false,
+      "visible": true,
+      "zIndex": 7
+    },
+    {
+      "instanceId": "widget_1789459055488",
+      "widgetId": "godprofile-marquee",
+      "name": "Godprofile-marquee Widget",
+      "position": {
+        "x": 0,
+        "y": 844
+      },
+      "size": {
+        "width": 800,
+        "height": 120
+      },
+      "config": {
+        "accentColor": "#b6a891"
+      },
       "locked": false,
       "visible": true,
       "zIndex": 7
