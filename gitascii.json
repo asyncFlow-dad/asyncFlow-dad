@@ -5286,7 +5286,9 @@
         "hideBorder": true,
         "hideDecorations": true,
         "animationType": "none",
-        "animationPreviewKey": 2
+        "animationPreviewKey": 2,
+        "showTitle": false,
+        "theme": "dark"
       },
       "locked": false,
       "visible": true,
