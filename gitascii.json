@@ -5281,7 +5281,7 @@
         "height": 250
       },
       "config": {
-        "branch": "output",
+        "branch": "main",
         "lockAspectRatio": true,
         "hideBorder": true,
         "hideDecorations": true,
