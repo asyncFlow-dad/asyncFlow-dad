@@ -5280,7 +5280,11 @@
         "width": 800,
         "height": 250
       },
-      "config": {},
+      "config": {
+        "hideDecorations": true,
+        "hideBorder": true,
+        "lockAspectRatio": true
+      },
       "locked": false,
       "visible": true,
       "zIndex": 7
