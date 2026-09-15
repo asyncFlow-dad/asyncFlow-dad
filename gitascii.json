@@ -76,11 +76,11 @@
           "ts",
           "css",
           "py",
-          "rust",
           "php",
           "nextjs",
           "tailwind",
-          "flutter"
+          "flutter",
+          "reactnative"
         ],
         "theme": "dark",
         "perLine": 4,
