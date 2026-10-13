@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: write # keep-alive below
 
 concurrency:
   group: profile-gist
@@ -34,3 +35,11 @@ jobs:
             '{files: {"github-contribution-grid-snake.svg": {content: $l},
                       "github-contribution-grid-snake-dark.svg": {content: $d}}}' \
             | gh api -X PATCH "gists/$GIST_ID" --input - --silent
+
+      # ponytail: no more bot commits on main, so GitHub may disable this
+      # schedule after 60 quiet days. Re-enabling via API should reset that timer
+      # (same trick as keepalive-workflow's API mode).
+      - name: keep schedule alive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/snake.yml/enable"

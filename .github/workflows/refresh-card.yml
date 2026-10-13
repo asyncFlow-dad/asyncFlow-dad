@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: read
+  actions: write # keep-alive below
 
 concurrency:
   group: profile-gist
@@ -46,3 +47,11 @@ jobs:
           jq -n --rawfile d dark_mode.svg --rawfile l light_mode.svg \
             '{files: {"dark_mode.svg": {content: $d}, "light_mode.svg": {content: $l}}}' \
             | gh api -X PATCH "gists/$GIST_ID" --input - --silent
+
+      # ponytail: no more bot commits on main, so GitHub may disable this
+      # schedule after 60 quiet days. Re-enabling via API should reset that timer
+      # (same trick as keepalive-workflow's API mode).
+      - name: keep schedule alive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/refresh-card.yml/enable"
