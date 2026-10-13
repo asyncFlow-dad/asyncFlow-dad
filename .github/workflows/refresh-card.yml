@@ -1,7 +1,8 @@
 # gh-ascii — daily card refresh
 #
-# Re-downloads both themes once a day and commits them only when the card
-# actually changed, so stars/followers/Uptime stay current without manual work.
+# Re-downloads both themes once a day and uploads them to the profile gist,
+# so stars/followers/Uptime stay current without bot commits on main.
+# Needs secret GIST_TOKEN: a PAT with gist write access only.
 #
 # Heads-up: GitHub disables scheduled workflows after 60 days of repo
 # inactivity. Profile repos are quiet by design — if the card stops updating,
@@ -15,18 +16,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: refresh-gh-ascii-card
-  cancel-in-progress: true
+  group: profile-gist
+  cancel-in-progress: false
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-
       - name: Download both themes
         env:
           HANDLE: asyncFlow-dad
@@ -39,14 +38,11 @@ jobs:
             "$GH_ASCII_URL/$HANDLE?theme=light" \
             -o light_mode.svg
 
-      - name: Commit only if the card changed
+      - name: Upload to gist
+        env:
+          GH_TOKEN: ${{ secrets.GIST_TOKEN }}
+          GIST_ID: a4419b43713bb3e6724fcbb338694ebd
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dark_mode.svg light_mode.svg
-          if git diff --cached --quiet; then
-            echo "Card unchanged — nothing to commit."
-          else
-            git commit -m "chore: refresh gh-ascii card"
-            git push
-          fi
+          jq -n --rawfile d dark_mode.svg --rawfile l light_mode.svg \
+            '{files: {"dark_mode.svg": {content: $d}, "light_mode.svg": {content: $l}}}' \
+            | gh api -X PATCH "gists/$GIST_ID" --input - --silent

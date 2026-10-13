@@ -4,20 +4,18 @@ on:
   schedule:
     - cron: "0 0 * * *" # 매일 00:00 UTC 갱신
   workflow_dispatch: # 수동 실행 버튼
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - "**.svg"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: profile-gist
+  cancel-in-progress: false
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-
       - name: generate snake svg
         uses: Platane/snk/svg-only@v3
         with:
@@ -26,25 +24,13 @@ jobs:
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
 
-      - name: push to output branch
-        uses: crazy-max/ghaction-github-pages@v3.1.0
-        with:
-          target_branch: output
-          build_dir: dist
+      - name: upload to gist
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: commit svgs to main
+          GH_TOKEN: ${{ secrets.GIST_TOKEN }}
+          GIST_ID: a4419b43713bb3e6724fcbb338694ebd
         run: |
-          cp dist/github-contribution-grid-snake.svg \
-             dist/github-contribution-grid-snake-dark.svg .
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add github-contribution-grid-snake.svg \
-                  github-contribution-grid-snake-dark.svg
-          if git diff --cached --quiet; then
-            echo "Snake unchanged — nothing to commit."
-          else
-            git commit -m "chore: refresh contribution snake"
-            git push
-          fi
+          jq -n --rawfile l dist/github-contribution-grid-snake.svg \
+                --rawfile d dist/github-contribution-grid-snake-dark.svg \
+            '{files: {"github-contribution-grid-snake.svg": {content: $l},
+                      "github-contribution-grid-snake-dark.svg": {content: $d}}}' \
+            | gh api -X PATCH "gists/$GIST_ID" --input - --silent
